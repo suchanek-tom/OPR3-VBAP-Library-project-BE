@@ -17,7 +17,7 @@ public class Book {
     private String author;
     @Column(columnDefinition = "TEXT")
     private String content;
-    private int year;
+    private int publicationYear;
     private String isbn;
     private boolean available = true;
 }

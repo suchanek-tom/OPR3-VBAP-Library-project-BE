@@ -37,7 +37,7 @@ public class BookController {
         b.setTitle(updated.getTitle());
         b.setAuthor(updated.getAuthor());
         b.setContent(updated.getContent());
-        b.setYear(updated.getYear());
+        b.setPublicationYear(updated.getPublicationYear());
         b.setIsbn(updated.getIsbn());
         b.setAvailable(updated.isAvailable());
         return repo.save(b);
