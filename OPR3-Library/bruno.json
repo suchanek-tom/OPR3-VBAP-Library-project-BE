@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "OPR3-Library",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

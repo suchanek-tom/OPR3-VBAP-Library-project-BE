@@ -1,0 +1,30 @@
+meta {
+  name: Post one book
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/books
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "content": "A dystopian novel set in a totalitarian state where surveillance and control dominate society.",
+    "publicationYear": 1949,
+    "isbn": "978-0451524935"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

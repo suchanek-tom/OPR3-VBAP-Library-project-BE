@@ -2,19 +2,26 @@ package com.example.library.controller;
 
 import com.example.library.model.User;
 import com.example.library.repository.UserRepository;
+import com.example.library.dto.LoginRequest;
+import com.example.library.dto.LoginResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
 public class UserController {
     private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository repo) {
+    public UserController(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -22,9 +29,32 @@ public class UserController {
         return repo.findAll();
     }
 
+    // POST - Create user (hashes password)
     @PostMapping
-    public User create(@RequestBody User user) {
-        return repo.save(user);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        // Hash the password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User saved = repo.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    // POST - Login endpoint
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Optional<User> userOpt = repo.findByEmail(loginRequest.getEmail());
+
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+
+        User user = userOpt.get();
+
+        // Verify password using BCrypt
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+
+        return ResponseEntity.ok(new LoginResponse(user.getId(), user.getEmail(), user.getName()));
     }
 
     // GET user by ID
@@ -48,7 +78,11 @@ public class UserController {
         user.setEmail(updated.getEmail());
         user.setAddress(updated.getAddress());
         user.setCity(updated.getCity());
-        user.setPassword(updated.getPassword());
+
+        // Only hash password if it's being changed
+        if (updated.getPassword() != null && !updated.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updated.getPassword()));
+        }
 
         User saved = repo.save(user);
         return ResponseEntity.ok(saved);
