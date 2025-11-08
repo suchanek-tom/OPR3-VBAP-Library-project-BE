@@ -69,14 +69,12 @@ public class LoanController {
         loan.setReturnDate(updated.getReturnDate());
         loan.setStatus(updated.getStatus());
 
-        // If status changed from ACTIVE to RETURNED, make book available
         if (previousStatus != null && !previousStatus.equals(updated.getStatus())) {
             Book book = loan.getBook();
             if ("RETURNED".equalsIgnoreCase(updated.getStatus())) {
                 book.setAvailable(true);
                 bookRepo.save(book);
             } else if ("ACTIVE".equalsIgnoreCase(updated.getStatus())) {
-                // mark book as not available if it is currently available
                 if (book.isAvailable()) {
                     book.setAvailable(false);
                     bookRepo.save(book);
@@ -88,7 +86,6 @@ public class LoanController {
         return ResponseEntity.ok(saved);
     }
 
-    // DELETE loan
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Loan loan = loanRepo.findById(id)
@@ -101,7 +98,6 @@ public class LoanController {
                 bookRepo.save(book);
             }
         }
-
         loanRepo.deleteById(id);
         return ResponseEntity.noContent().build();
     }

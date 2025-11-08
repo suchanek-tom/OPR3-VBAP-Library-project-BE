@@ -5,11 +5,28 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/api/users/{id}
-  body: none
+  url: http://localhost:8080/api/users/1
+  body: json
   auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Test",
+    "surname": "User",
+    "email": "test@example.com",
+    "address": "123 Main St",
+    "city": "New York",
+    "password": "$2a$10$7qp70WcB7z4hCKv.GPKY2uBDpSGGtIC9Oac56jxNrXShryEaFMm2u",
+    "role": "ROLE_USER"
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

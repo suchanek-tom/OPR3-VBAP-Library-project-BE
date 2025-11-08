@@ -29,16 +29,14 @@ public class UserController {
         return repo.findAll();
     }
 
-    // POST - Create user (hashes password)
+    // Create user with hash password
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user) {
-        // Hash the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = repo.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // POST - Login endpoint
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<User> userOpt = repo.findByEmail(loginRequest.getEmail());
@@ -49,7 +47,6 @@ public class UserController {
 
         User user = userOpt.get();
 
-        // Verify password using BCrypt
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
@@ -74,7 +71,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    // PUT update user
+    // update user
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User updated) {
         User user = repo.findById(id)
@@ -87,7 +84,6 @@ public class UserController {
         user.setAddress(updated.getAddress());
         user.setCity(updated.getCity());
 
-        // Only hash password if it's being changed
         if (updated.getPassword() != null && !updated.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(updated.getPassword()));
         }
@@ -96,7 +92,7 @@ public class UserController {
         return ResponseEntity.ok(saved);
     }
 
-    // DELETE user
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         if (!repo.existsById(id)) {

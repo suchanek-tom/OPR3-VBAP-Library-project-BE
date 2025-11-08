@@ -20,13 +20,13 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    // GET all books
+    // get all books
     @GetMapping
     public List<Book> getAll() {
         return bookService.getAllBooks();
     }
 
-    // GET book by ID
+    // get book by ID
     @GetMapping("/{id}")
     public ResponseEntity<Book> getOne(@PathVariable Integer id) {
         Book book = bookService.getBookById(id)
@@ -34,14 +34,14 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
-    // POST - Create a new book and save to database
+    // Create a new book
     @PostMapping
     public ResponseEntity<Book> create(@RequestBody Book book) {
         Book savedBook = bookService.createBook(book);
         return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
     }
 
-    // POST - Create multiple books and save to database
+    // Create multiple books
     @PostMapping("/bulk")
     public ResponseEntity<List<Book>> createMany(@RequestBody List<Book> books) {
         if (books == null || books.isEmpty()) {
@@ -51,7 +51,7 @@ public class BookController {
         return new ResponseEntity<>(savedBooks, HttpStatus.CREATED);
     }
 
-    // PUT - Update an existing book in the database
+    // Update an existing book
     @PutMapping("/{id}")
     public ResponseEntity<Book> update(@PathVariable Integer id, @RequestBody Book updated) {
         try {
@@ -62,7 +62,7 @@ public class BookController {
         }
     }
 
-    // DELETE - Delete a book from the database
+    // Delete a book
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         try {
