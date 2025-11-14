@@ -47,10 +47,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/login", "/api/users/login", "/api/users/register").permitAll()
-                        .requestMatchers("/api/books").permitAll()
-                        .requestMatchers("/api/books/{id}").permitAll()
+                        .requestMatchers("GET", "/api/books").permitAll()
+                        .requestMatchers("GET", "/api/books/{id}").permitAll()
+                        .requestMatchers("GET", "/api/users").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/users/add").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("GET", "/api/users/{id}").authenticated()
+                        .requestMatchers("/api/loans/**").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

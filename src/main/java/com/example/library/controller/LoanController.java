@@ -2,6 +2,8 @@ package com.example.library.controller;
 
 import com.example.library.model.Loan;
 import com.example.library.model.Book;
+import com.example.library.model.User;
+import com.example.library.dto.BorrowLoanRequest;
 import com.example.library.repository.LoanRepository;
 import com.example.library.repository.BookRepository;
 import org.springframework.web.bind.annotation.*;
@@ -39,21 +41,21 @@ public class LoanController {
      * Borrow a book - creates a new loan and marks book as unavailable
      */
     @PostMapping("/borrow")
-    public ResponseEntity<Loan> borrow(@Valid @RequestBody Loan loan) {
+    public ResponseEntity<Loan> borrow(@Valid @RequestBody BorrowLoanRequest borrowRequest) {
         try {
-            if (loan == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan data is required");
+            if (borrowRequest == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Borrow request is required");
             }
 
-            if (loan.getUser() == null || loan.getUser().getId() == null || loan.getUser().getId() <= 0) {
+            if (borrowRequest.getUserId() == null || borrowRequest.getUserId() <= 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid user ID is required");
             }
 
-            if (loan.getBook() == null || loan.getBook().getId() == null || loan.getBook().getId() <= 0) {
+            if (borrowRequest.getBookId() == null || borrowRequest.getBookId() <= 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid book ID is required");
             }
 
-            Book book = bookRepo.findById(loan.getBook().getId())
+            Book book = bookRepo.findById(borrowRequest.getBookId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
             if (!book.isAvailable()) {
@@ -63,6 +65,12 @@ public class LoanController {
             book.setAvailable(false);
             bookRepo.save(book);
 
+            Loan loan = new Loan();
+            User user = new User();
+            user.setId(borrowRequest.getUserId());
+
+            loan.setUser(user);
+            loan.setBook(book);
             loan.setLoanDate(LocalDate.now());
             loan.setStatus("ACTIVE");
             loan.setReturnDate(null);
@@ -128,7 +136,8 @@ public class LoanController {
         }
     }
 
-    // PUT update loan (updates dates/status). Adjusts book availability when status changes.
+    // PUT update loan (updates dates/status). Adjusts book availability when status
+    // changes.
     @PutMapping("/{id}")
     public ResponseEntity<Loan> update(@PathVariable Integer id, @Valid @RequestBody Loan updated) {
         try {
