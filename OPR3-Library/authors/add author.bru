@@ -1,0 +1,31 @@
+meta {
+  name: add author
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/api/authors
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  
+    {
+      "firstName": "Ernest",
+      "lastName": "Hemingway",
+      "biography": "American novelist and short-story writer.",
+      "nationality": "American"
+    }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

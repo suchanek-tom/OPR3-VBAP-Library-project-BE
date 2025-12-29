@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.List;
 
+//todo pagination, filtering, sorting
+
+
 @RestController
 @RequestMapping("/api/loans")
 @CrossOrigin(origins = "*")

@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+
+//todo pagination, filtering, sorting
+
 @RestController
 @RequestMapping("/api/books")
 @CrossOrigin(origins = "*")

@@ -37,6 +37,34 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles AuthorNotFoundException
+     */
+    @ExceptionHandler(AuthorNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorNotFoundException(AuthorNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                null,
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles AuthorAlreadyExistsException
+     */
+    @ExceptionHandler(AuthorAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorAlreadyExistsException(AuthorAlreadyExistsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                null,
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    /**
      * Handles ResponseStatusException thrown from controllers
      */
     @ExceptionHandler(ResponseStatusException.class)

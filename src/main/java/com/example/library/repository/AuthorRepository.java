@@ -1,0 +1,16 @@
+package com.example.library.repository;
+
+import com.example.library.model.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface AuthorRepository extends JpaRepository<Author, Integer> {
+
+    @Query("SELECT a FROM Author a WHERE LOWER(a.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR LOWER(a.lastName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Author> findByName(@Param("name") String name);
+
+    List<Author> findByNationality(String nationality);
+}
