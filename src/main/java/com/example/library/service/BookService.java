@@ -26,11 +26,11 @@ public class BookService {
      * Get all books from the database with pagination
      */
     public Page<Book> getAllBooks(Pageable pageable) {
-        logger.debug("Service: Fetching books with pagination - page: {}, size: {}", 
-                     pageable.getPageNumber(), pageable.getPageSize());
+        logger.debug("Service: Fetching books with pagination - page: {}, size: {}",
+                pageable.getPageNumber(), pageable.getPageSize());
         Page<Book> books = bookRepository.findAll(pageable);
-        logger.debug("Service: Retrieved {} books out of {} total", 
-                     books.getNumberOfElements(), books.getTotalElements());
+        logger.debug("Service: Retrieved {} books out of {} total",
+                books.getNumberOfElements(), books.getTotalElements());
         return books;
     }
 
@@ -87,7 +87,7 @@ public class BookService {
         book.setPublicationYear(updatedBook.getPublicationYear());
         book.setIsbn(updatedBook.getIsbn());
         book.setAvailable(updatedBook.isAvailable());
-        
+
         // Update authors relationship
         if (updatedBook.getAuthors() != null && !updatedBook.getAuthors().isEmpty()) {
             Set<Author> newAuthors = new HashSet<>(updatedBook.getAuthors());
