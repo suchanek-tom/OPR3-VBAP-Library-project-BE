@@ -1,10 +1,10 @@
 # 📚 Library System - REST API Backend
 
-**Autor:** Tomáš Suchanek | **Předmět:** 7OPR3 | **Java:** 21 LTS | **Framework:** Spring Boot 3.5.7
+**Author:** Tomáš Suchanek | **Course:** 7OPR3 + 7VBAP | **Java:** 21 LTS | **Framework:** Spring Boot 3.5.7
 
 ---
 
-## 🚀 Spuštění
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -29,7 +29,7 @@ mysql -u root -p librarydb < database.sql
 ```bash
 cd library
 ./mvnw spring-boot:run
-# Server běží na http://localhost:8080
+# Server runs at http://localhost:8080
 ```
 
 ### Configuration
@@ -44,7 +44,7 @@ spring.datasource.password=rootroot
 
 ---
 
-## 📖 API Dokumentace
+## 📖 API Documentation
 
 ### 🌐 Swagger/OpenAPI Documentation
 
@@ -55,10 +55,12 @@ http://localhost:8080/swagger-ui/index.html
 ```
 
 **OpenAPI Specification:**
+
 - JSON: `http://localhost:8080/v3/api-docs`
 - YAML: `http://localhost:8080/v3/api-docs.yaml`
 
 Swagger UI allows you to:
+
 - ✅ Browse all API endpoints
 - ✅ View request/response schemas
 - ✅ Test endpoints directly in the browser
@@ -75,16 +77,16 @@ Authorization: Bearer <jwt_token>
 
 ### BOOKS API
 
-| Metoda | Endpoint          | Popis              | Auth |
-| ------ | ----------------- | ------------------ | ---- |
-| GET    | `/api/books`      | Všechny knihy      | ❌   |
-| GET    | `/api/books/{id}` | Kniha podle ID     | ❌   |
-| POST   | `/api/books`      | Vytvořit knihu     | ✅   |
-| POST   | `/api/books/bulk` | Vytvořit více knih | ✅   |
-| PUT    | `/api/books/{id}` | Aktualizovat knihu | ✅   |
-| DELETE | `/api/books/{id}` | Smazat knihu       | ✅   |
+| Method | Endpoint          | Description           | Auth |
+| ------ | ----------------- | --------------------- | ---- |
+| GET    | `/api/books`      | All books             | ❌   |
+| GET    | `/api/books/{id}` | Book by ID            | ❌   |
+| POST   | `/api/books`      | Create book           | ✅   |
+| POST   | `/api/books/bulk` | Create multiple books | ✅   |
+| PUT    | `/api/books/{id}` | Update book           | ✅   |
+| DELETE | `/api/books/{id}` | Delete book           | ✅   |
 
-**Příklad - Vytvořit knihu:**
+**Example - Create book:**
 
 ```bash
 curl -X POST http://localhost:8080/api/books \
@@ -95,7 +97,7 @@ curl -X POST http://localhost:8080/api/books \
     "author": "George Orwell",
     "publicationYear": 1949,
     "isbn": "978-0451524935",
-    "content": "Dystopické dílo"
+    "content": "Dystopian novel"
   }'
 ```
 
@@ -103,39 +105,39 @@ curl -X POST http://localhost:8080/api/books \
 
 ### USERS API
 
-| Metoda | Endpoint              | Popis                  | Auth     |
-| ------ | --------------------- | ---------------------- | -------- |
-| GET    | `/api/users`          | Všichni uživatelé      | ✅ Admin |
-| GET    | `/api/users/{id}`     | Uživatel podle ID      | ✅       |
-| POST   | `/api/users`          | Vytvořit uživatele     | ✅ Admin |
-| POST   | `/api/users/login`    | Přihlášení             | ❌       |
-| POST   | `/api/users/register` | Registrace             | ❌       |
-| PUT    | `/api/users/{id}`     | Aktualizovat uživatele | ✅       |
-| DELETE | `/api/users/{id}`     | Smazat uživatele       | ✅ Admin |
+| Method | Endpoint              | Description | Auth     |
+| ------ | --------------------- | ----------- | -------- |
+| GET    | `/api/users`          | All users   | ✅ Admin |
+| GET    | `/api/users/{id}`     | User by ID  | ✅       |
+| POST   | `/api/users`          | Create user | ✅ Admin |
+| POST   | `/api/users/login`    | Login       | ❌       |
+| POST   | `/api/users/register` | Register    | ❌       |
+| PUT    | `/api/users/{id}`     | Update user | ✅       |
+| DELETE | `/api/users/{id}`     | Delete user | ✅ Admin |
 
-**Příklad - Registrace:**
+**Example - Register:**
 
 ```bash
 curl -X POST http://localhost:8080/api/users/register \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Jan",
-    "surname": "Novák",
-    "email": "jan@example.com",
-    "address": "Ulice 123",
-    "city": "Praha",
-    "password": "heslo123"
+    "name": "John",
+    "surname": "Doe",
+    "email": "john@example.com",
+    "address": "Street 123",
+    "city": "Prague",
+    "password": "password123"
   }'
 ```
 
-**Příklad - Login:**
+**Example - Login:**
 
 ```bash
 curl -X POST http://localhost:8080/api/users/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "jan@example.com",
-    "password": "heslo123"
+    "email": "john@example.com",
+    "password": "password123"
   }'
 ```
 
@@ -155,16 +157,16 @@ Response:
 
 ### LOANS API
 
-| Metoda | Endpoint                 | Popis                 | Auth     |
-| ------ | ------------------------ | --------------------- | -------- |
-| GET    | `/api/loans`             | Všechny výpůjčky      | ✅ Admin |
-| GET    | `/api/loans/{id}`        | Výpůjčka podle ID     | ✅       |
-| POST   | `/api/loans/borrow`      | Půjčit knihu          | ✅       |
-| POST   | `/api/loans/return/{id}` | Vrátit knihu          | ✅       |
-| PUT    | `/api/loans/{id}`        | Aktualizovat výpůjčku | ✅       |
-| DELETE | `/api/loans/{id}`        | Smazat výpůjčku       | ✅       |
+| Method | Endpoint                 | Description | Auth     |
+| ------ | ------------------------ | ----------- | -------- |
+| GET    | `/api/loans`             | All loans   | ✅ Admin |
+| GET    | `/api/loans/{id}`        | Loan by ID  | ✅       |
+| POST   | `/api/loans/borrow`      | Borrow book | ✅       |
+| POST   | `/api/loans/return/{id}` | Return book | ✅       |
+| PUT    | `/api/loans/{id}`        | Update loan | ✅       |
+| DELETE | `/api/loans/{id}`        | Delete loan | ✅       |
 
-**Příklad - Půjčit knihu:**
+**Example - Borrow book:**
 
 ```bash
 curl -X POST http://localhost:8080/api/loans/borrow \
@@ -176,7 +178,7 @@ curl -X POST http://localhost:8080/api/loans/borrow \
   }'
 ```
 
-**Příklad - Vrátit knihu:**
+**Example - Return book:**
 
 ```bash
 curl -X POST http://localhost:8080/api/loans/return/1 \
@@ -185,13 +187,13 @@ curl -X POST http://localhost:8080/api/loans/return/1 \
 
 ---
 
-## 🛠️ Technologie
+## 🛠️ Technologies
 
-- **Java 21 LTS** - Nejnovější LTS verze
+- **Java 21 LTS** - Latest LTS version
 - **Spring Boot 3.5.7** - Framework
 - **Spring Data JPA** - Database access
 - **Spring Security** - Authentication & Authorization
-- **MySQL 8.0** - Databáze
+- **MySQL 8.0** - Database
 - **JWT (jjwt 0.12.3)** - Token-based authentication
 - **BCrypt** - Password hashing
 - **Lombok** - Boilerplate reduction
@@ -203,18 +205,18 @@ curl -X POST http://localhost:8080/api/loans/return/1 \
 
 ---
 
-## 🔒 Bezpečnost
+## 🔒 Security
 
 ✅ **Password Security**
 
-- BCrypt hashovací algoritmus
-- Hesla se nekdy neukládají v plain textu
-- Password encoding při registraci a update
+- BCrypt hashing algorithm
+- Passwords never stored in plain text
+- Password encoding during registration and update
 
 ✅ **Authentication & Authorization**
 
 - JWT (JSON Web Token) based authentication
-- Token expiration (24 hodin)
+- Token expiration (24 hours)
 - Role-based access control (ROLE_USER, ROLE_ADMIN)
 - Protected endpoints require valid token
 
@@ -227,14 +229,14 @@ curl -X POST http://localhost:8080/api/loans/return/1 \
 
 ✅ **Error Handling**
 
-- GlobalExceptionHandler s @ExceptionHandler
+- GlobalExceptionHandler with @ExceptionHandler
 - Custom ErrorResponse DTO
 - Proper HTTP status codes
 - Detailed error messages
 
 ---
 
-## 📊 Datový Model
+## 📊 Data Model
 
 ### User
 
@@ -292,11 +294,11 @@ Book N ←→ N Author (M:N relationship via book_author join table)
 
 ---
 
-## 📝 Logování
+## 📝 Logging
 
-Comprehensive logging na všech úrovních:
+Comprehensive logging at all levels:
 
-**Konfiguraci v `application.properties`:**
+**Configuration in `application.properties`:**
 
 ```properties
 logging.level.com.example.library=DEBUG
@@ -305,48 +307,51 @@ logging.level.com.example.library.service=INFO
 logging.file.name=logs/library.log
 ```
 
-**Co se loguje:**
+**What is logged:**
 
-- ✅ Všechny HTTP requests (metoda, endpoint, user)
-- ✅ Úspěšné operace (create, update, delete)
-- ✅ Selhání (not found, validation errors, exceptions)
-- ✅ Autentizace (login success, failed attempts)
-- ✅ JWT token generation a validation
+- ✅ All HTTP requests (method, endpoint, user)
+- ✅ Successful operations (create, update, delete)
+- ✅ Failures (not found, validation errors, exceptions)
+- ✅ Authentication (login success, failed attempts)
+- ✅ JWT token generation and validation
 - ✅ Database operations
 
-Log soubor: `logs/library.log` (10MB rotation, 10-day history)
+Log file: `logs/library.log` (10MB rotation, 10-day history)
 
 ---
 
-## 🎯 Nové Funkce a Vylepšení
+## 🎯 New Features and Improvements
 
 ### ✨ Swagger/OpenAPI 3 Integration
 
-Kompletní interaktivní API dokumentace:
+Complete interactive API documentation:
 
 - **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
 - **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
 - **OpenAPI YAML**: `http://localhost:8080/v3/api-docs.yaml`
 
-**Featury:**
-- ✅ Automatická generace dokumentace z kódu
-- ✅ Interactive API testing přímo v prohlížeči
+**Features:**
+
+- ✅ Automatic documentation generation from code
+- ✅ Interactive API testing directly in browser
 - ✅ JWT authentication support (Authorize button)
-- ✅ Request/response schémata a příklady
-- ✅ Validation rules a error handling dokumentace
-- ✅ Veřejný přístup bez autentizace pro prohlížení
+- ✅ Request/response schemas and examples
+- ✅ Validation rules and error handling documentation
+- ✅ Public access without authentication for viewing
 
 ### 📄 Pagination Support
 
-Všechny list endpointy podporují stránkování:
+All list endpoints support pagination:
 
 **Query Parameters:**
-- `page` - Číslo stránky (default: 0)
-- `size` - Počet položek na stránku (default: 10)
-- `sortBy` - Pole pro řazení (default: "id")
-- `sortDirection` - Směr řazení: ASC/DESC (default: varies by endpoint)
 
-**Příklad:**
+- `page` - Page number (default: 0)
+- `size` - Items per page (default: 10)
+- `sortBy` - Field to sort by (default: "id")
+- `sortDirection` - Sort direction: ASC/DESC (default: varies by endpoint)
+
+**Example:**
+
 ```bash
 GET /api/books?page=0&size=20&sortBy=title&sortDirection=ASC
 GET /api/users?page=1&size=5&sortBy=email&sortDirection=DESC
@@ -354,6 +359,7 @@ GET /api/loans?page=0&size=10&sortBy=loanDate&sortDirection=DESC
 ```
 
 **Response Format:**
+
 ```json
 {
   "content": [...],
@@ -381,17 +387,18 @@ GET /api/loans?page=0&size=10&sortBy=loanDate&sortDirection=DESC
 
 ### 🆔 UUID for User IDs
 
-Uživatelské ID používá UUID místo Integer:
+User IDs use UUID instead of Integer:
 
 - **Type**: String (UUID format)
 - **Generation**: `@GeneratedValue(strategy = GenerationType.UUID)`
-- **Benefits**: 
+- **Benefits**:
   - Better scalability
   - Distributed system friendly
   - No sequential ID guessing
   - Global uniqueness
 
 **API Impact:**
+
 - User endpoints use UUID: `/api/users/{uuid}`
 - Login/Register returns UUID in response
 - JWT token contains UUID as subject
@@ -399,9 +406,10 @@ Uživatelské ID používá UUID místo Integer:
 
 ### 📚 Author Entity & M:N Relationship
 
-Přidána entita Author s many-to-many vztahem ke knihám:
+Added Author entity with many-to-many relationship to books:
 
 **Author API:**
+
 - `GET /api/authors` - List all authors (pagination)
 - `GET /api/authors/{id}` - Get author by ID
 - `POST /api/authors` - Create author
@@ -409,21 +417,23 @@ Přidána entita Author s many-to-many vztahem ke knihám:
 - `DELETE /api/authors/{id}` - Delete author
 
 **Book-Author Relationship:**
-- Many-to-many vztah (kniha může mít více autorů, autor více knih)
+
+- Many-to-many relationship (book can have multiple authors, author multiple books)
 - Join table: `book_author`
-- API podporuje přiřazování autorů ke knihám
+- API supports assigning authors to books
 
 ### 📊 Comprehensive Logging
 
-Rozšířené logování všech operací:
+Extended logging of all operations:
 
-- **Request/Response logging** - Všechny HTTP requesty
+- **Request/Response logging** - All HTTP requests
 - **Authentication events** - Login attempts, JWT validation
-- **Database operations** - CRUD operations s detaily
+- **Database operations** - CRUD operations with details
 - **Error tracking** - Exception stack traces
 - **Performance metrics** - Query execution times
 
 **Log Levels:**
+
 ```properties
 com.example.library=DEBUG
 com.example.library.controller=INFO
@@ -432,6 +442,7 @@ com.example.library.security=DEBUG
 ```
 
 **Log File:**
+
 - Path: `logs/library.log`
 - Rotation: 10MB per file
 - History: 10 days
@@ -439,38 +450,38 @@ com.example.library.security=DEBUG
 
 ### 🗄️ Database Reset Scripts
 
-SQL skripty pro snadnou správu databáze:
+SQL scripts for easy database management:
 
-- **`reset_database.sql`** - Kompletní reset s test daty
-  - Drops all tables (správné pořadí kvůli FK)
+- **`reset_database.sql`** - Complete reset with test data
+  - Drops all tables (correct order due to FK)
   - Recreates schema with UUID
   - Inserts test users, books, authors, loans
-  
-- **`drop_tables.sql`** - Pouze drop všech tabulek
+- **`drop_tables.sql`** - Only drops all tables
 
 **Usage:**
+
 ```bash
 mysql -u root -p < reset_database.sql
 ```
 
 ### ✅ Validation & Error Handling
 
-Rozšířené validace a error handling:
+Extended validation and error handling:
 
 - **Input Validation**: Jakarta validation annotations
 - **Custom Validators**: Email, ISBN, date ranges
-- **Global Exception Handler**: Centralizované error handling
-- **HTTP Status Codes**: Správné kódy (200, 201, 400, 401, 403, 404, 409, 500)
-- **Error Response DTO**: Konzistentní formát error responses
-- **Validation Messages**: Lokalizované chybové hlášky
+- **Global Exception Handler**: Centralized error handling
+- **HTTP Status Codes**: Correct codes (200, 201, 400, 401, 403, 404, 409, 500)
+- **Error Response DTO**: Consistent error response format
+- **Validation Messages**: Localized error messages
 
 ---
 
 ## 🧪 Testing Endpoints
 
-### s Bruno/Postman
+### With Bruno/Postman
 
-Import kolekce z `OPR3-Library/` složky:
+Import collection from `OPR3-Library/` folder:
 
 - `users/Login user.bru` - Login
 - `users/Create new user.bru` - Create user
@@ -479,14 +490,15 @@ Import kolekce z `OPR3-Library/` složky:
 - `loans/Borrow a book.bru` - Borrow book
 - `loans/Return a loan.bru` - Return book
 
-**Nebo použij Swagger UI** pro přímé testování v prohlížeči:
+**Or use Swagger UI** for direct testing in browser:
+
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-## 🏗️ Vícevrstvá Architektura
+## 🏗️ Multi-Layer Architecture
 
 ```
 Controller Layer
@@ -519,4 +531,4 @@ Max Age: 3600 seconds
 
 ---
 
-**Status:** ✅ Hotovo | **Datum:** 4. ledna 2026 | **Swagger:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+**Status:** ✅ Done | **Date:** January 4, 2026 | **Swagger:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
