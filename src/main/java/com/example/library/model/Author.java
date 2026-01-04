@@ -1,12 +1,14 @@
 package com.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +16,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "books")
+@ToString(exclude = "books")
 @Entity
 public class Author {
     @Id
@@ -38,7 +42,7 @@ public class Author {
     private String nationality;
 
     @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("authors")
+    @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
     public String getFullName() {

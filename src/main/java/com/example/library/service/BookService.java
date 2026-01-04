@@ -1,5 +1,6 @@
 package com.example.library.service;
 
+import com.example.library.model.Author;
 import com.example.library.model.Book;
 import com.example.library.repository.BookRepository;
 import org.springframework.data.domain.Page;
@@ -7,8 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -84,6 +87,12 @@ public class BookService {
         book.setPublicationYear(updatedBook.getPublicationYear());
         book.setIsbn(updatedBook.getIsbn());
         book.setAvailable(updatedBook.isAvailable());
+        
+        // Update authors relationship
+        if (updatedBook.getAuthors() != null && !updatedBook.getAuthors().isEmpty()) {
+            Set<Author> newAuthors = new HashSet<>(updatedBook.getAuthors());
+            book.setAuthors(newAuthors);
+        }
 
         Book savedBook = bookRepository.save(book);
         logger.info("Service: Book updated successfully with id: {}", id);
