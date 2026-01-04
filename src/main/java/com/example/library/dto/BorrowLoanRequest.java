@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BorrowLoanRequest {
     @NotNull(message = "User ID is required")
-    private Integer userId;
+    private String userId;
 
     @NotNull(message = "Book ID is required")
     private Integer bookId;

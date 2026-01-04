@@ -71,7 +71,7 @@ public class LoanController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Borrow request is required");
             }
 
-            if (borrowRequest.getUserId() == null || borrowRequest.getUserId() <= 0) {
+            if (borrowRequest.getUserId() == null || borrowRequest.getUserId().isBlank()) {
                 logger.warn("Invalid user ID in borrow request: {}", borrowRequest.getUserId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid user ID is required");
             }
@@ -97,7 +97,7 @@ public class LoanController {
 
             Loan loan = new Loan();
             User user = new User();
-            user.setId(borrowRequest.getUserId());
+            user.setUid(borrowRequest.getUserId());
 
             loan.setUser(user);
             loan.setBook(book);

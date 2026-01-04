@@ -69,7 +69,7 @@ public class UserController {
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User saved = repo.save(user);
-            logger.info("Successfully created user with ID: {} and email: {}", saved.getId(), saved.getEmail());
+            logger.info("Successfully created user with ID: {} and email: {}", saved.getUid(), saved.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
         } catch (ResponseStatusException e) {
             throw e;
@@ -96,14 +96,14 @@ public class UserController {
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User saved = repo.save(user);
-            logger.info("User registered successfully with ID: {} and email: {}", saved.getId(), saved.getEmail());
+            logger.info("User registered successfully with ID: {} and email: {}", saved.getUid(), saved.getEmail());
 
-            String token = jwtUtil.generateToken(String.valueOf(saved.getId()), saved.getEmail(),
+            String token = jwtUtil.generateToken(saved.getUid(), saved.getEmail(),
                     saved.getRole().name());
             logger.debug("JWT token generated for user: {}", saved.getEmail());
 
             LoginResponse response = new LoginResponse(
-                    saved.getId(),
+                    saved.getUid(),
                     saved.getName(),
                     saved.getSurname(),
                     saved.getEmail(),
@@ -156,12 +156,12 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
             }
 
-            String token = jwtUtil.generateToken(String.valueOf(user.getId()), user.getEmail(), user.getRole().name());
-            logger.info("User login successful: {} (ID: {})", loginRequest.getEmail(), user.getId());
+            String token = jwtUtil.generateToken(user.getUid(), user.getEmail(), user.getRole().name());
+            logger.info("User login successful: {} (ID: {})", loginRequest.getEmail(), user.getUid());
             logger.debug("JWT token generated for login: {}", loginRequest.getEmail());
 
             LoginResponse response = new LoginResponse(
-                    user.getId(),
+                    user.getUid(),
                     user.getName(),
                     user.getSurname(),
                     user.getEmail(),
@@ -180,43 +180,43 @@ public class UserController {
     }
 
     // GET user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getOne(@PathVariable Integer id) {
-        logger.info("GET request: Fetching user with id: {}", id);
+    @GetMapping("/{uid}")
+    public ResponseEntity<User> getOne(@PathVariable String uid) {
+        logger.info("GET request: Fetching user with uid: {}", uid);
         try {
-            if (id == null || id <= 0) {
-                logger.warn("Invalid user ID: {}", id);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user ID");
+            if (uid == null || uid.isBlank()) {
+                logger.warn("Invalid user UID: {}", uid);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user UID");
             }
 
-            User user = repo.findById(id)
+            User user = repo.findById(uid)
                     .orElseThrow(() -> {
-                        logger.warn("User not found with id: {}", id);
+                        logger.warn("User not found with uid: {}", uid);
                         return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                     });
-            logger.info("Successfully retrieved user: {} (ID: {})", user.getEmail(), user.getId());
+            logger.info("Successfully retrieved user: {} (UID: {})", user.getEmail(), user.getUid());
             return ResponseEntity.ok(user);
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
-            logger.error("Error retrieving user with id: {}", id, e);
+            logger.error("Error retrieving user with uid: {}", uid, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve user");
         }
     }
 
     // update user
-    @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Integer id, @Valid @RequestBody User updated) {
-        logger.info("PUT request: Updating user with id: {}", id);
+    @PutMapping("/{uid}")
+    public ResponseEntity<User> update(@PathVariable String uid, @Valid @RequestBody User updated) {
+        logger.info("PUT request: Updating user with uid: {}", uid);
         try {
-            if (id == null || id <= 0) {
-                logger.warn("Invalid user ID for update: {}", id);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user ID");
+            if (uid == null || uid.isBlank()) {
+                logger.warn("Invalid user UID for update: {}", uid);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user UID");
             }
 
-            User user = repo.findById(id)
+            User user = repo.findById(uid)
                     .orElseThrow(() -> {
-                        logger.warn("User not found for update with id: {}", id);
+                        logger.warn("User not found for update with uid: {}", uid);
                         return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                     });
 
@@ -245,12 +245,12 @@ public class UserController {
 
             if (updated.getPassword() != null && !updated.getPassword().isEmpty()
                     && updated.getPassword().length() >= 6) {
-                logger.info("Password updated for user: {}", id);
+                logger.info("Password updated for user: {}", uid);
                 user.setPassword(passwordEncoder.encode(updated.getPassword()));
             }
 
             User saved = repo.save(user);
-            logger.info("User updated successfully: {} (ID: {})", saved.getEmail(), saved.getId());
+            logger.info("User updated successfully: {} (ID: {})", saved.getEmail(), saved.getUid());
             return ResponseEntity.ok(saved);
         } catch (ResponseStatusException e) {
             throw e;
@@ -258,7 +258,7 @@ public class UserController {
             logger.error("Invalid user data for update", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user data: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Error updating user with id: {}", id, e);
+            logger.error("Error updating user with uid: {}", uid, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update user");
         }
     }
@@ -266,27 +266,27 @@ public class UserController {
     /**
      * Delete user by ID
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        logger.info("DELETE request: Deleting user with id: {}", id);
+    @DeleteMapping("/{uid}")
+    public ResponseEntity<Void> delete(@PathVariable String uid) {
+        logger.info("DELETE request: Deleting user with uid: {}", uid);
         try {
-            if (id == null || id <= 0) {
-                logger.warn("Invalid user ID for deletion: {}", id);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user ID");
+            if (uid == null || uid.isBlank()) {
+                logger.warn("Invalid user UID for deletion: {}", uid);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user UID");
             }
 
-            if (!repo.existsById(id)) {
-                logger.warn("User not found for deletion with id: {}", id);
+            if (!repo.existsById(uid)) {
+                logger.warn("User not found for deletion with uid: {}", uid);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
             }
 
-            repo.deleteById(id);
-            logger.info("User deleted successfully with id: {}", id);
+            repo.deleteById(uid);
+            logger.info("User deleted successfully with uid: {}", uid);
             return ResponseEntity.noContent().build();
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
-            logger.error("Error deleting user with id: {}", id, e);
+            logger.error("Error deleting user with uid: {}", uid, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete user");
         }
     }

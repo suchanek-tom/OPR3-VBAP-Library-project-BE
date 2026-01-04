@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Entity(name = "library_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; // todo použít uid
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String uid;
 
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
